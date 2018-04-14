@@ -56,4 +56,13 @@ public class Player {
             if(combinations[i].isComplete()) point += combinations[i].getPoint();
         }
     }
+
+    public int gethandCount() {
+        return handCount;
+    }
+
+    public Card gethandCardByIdx (int idx) {
+        if (idx < handCount) return handCard[idx];
+        else return null;
+    }
 }

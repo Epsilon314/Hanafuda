@@ -5,11 +5,12 @@ package com.example.administrator.hanafuda;
  */
 
 public class Game {
-    private int combRuleAmount = 20;
+    private int combRuleAmount = 4;
     private Deck deck;
     private Field field;
     private Player player1;
     private Player player2;
+    private Player activeplayer;
     private Combination[] combinationRule;
     private int combRuleCount;
 
@@ -29,11 +30,26 @@ public class Game {
         int[] basePoint = {10,8,7,6};
         boolean[] allowExtra = {false,false,false,false};
         for (int i = 0; i < combRuleAmount; i++) {
-            combinationRule[i] = new Combination(combName[i], requiredCardId[1], requiredCardCount[i], basePoint[i], allowExtra[i]);
+            combinationRule[i] = new Combination(combName[i], requiredCardId[i], requiredCardCount[i], basePoint[i], allowExtra[i]);
         }
         player1 = new Player(0,combinationRule);
         player2 = new Player(0,combinationRule);
+        activeplayer = player1;
     }
 
+    public void grantCard(int number) {
+        for (int i = 0; i < number; i++) {
+            Card card = deck.DrawCard();
+            activeplayer.playerDraw(card);
+        }
+    }
 
+    public Player getActivePlayer() {
+        return activeplayer;
+    }
+
+    public void changeActiveplayer() {
+        if (activeplayer == player1) activeplayer = player2;
+        else activeplayer = player1;
+    }
 }
