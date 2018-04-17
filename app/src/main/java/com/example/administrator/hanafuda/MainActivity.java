@@ -1,13 +1,9 @@
 package com.example.administrator.hanafuda;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.mainGame);
         RelativeLayout playerHandRegion = findViewById(R.id.mainView);
         allCardFace = new int[48];
         allCardFace[0] = R.drawable.cardface10;
@@ -69,33 +65,27 @@ public class MainActivity extends AppCompatActivity {
         allCardFace[46] = R.drawable.cardface122;
         allCardFace[47] = R.drawable.cardface123;
 
-        ImageButton handcard1 = new ImageButton(this);
-        ImageButton handcard2 = new ImageButton(this);
-        ImageButton handcard3 = new ImageButton(this);
-        ImageButton handcard4 = new ImageButton(this);
-        ImageButton handcard5 = new ImageButton(this);
-        ImageButton handcard6 = new ImageButton(this);
-        ImageButton handcard7 = new ImageButton(this);
-        ImageButton handcard8 = new ImageButton(this);
-
         Game newgame = new Game();
         newgame.grantCard(8);
-        handcard1.setImageResource(allCardFace[newgame.getActivePlayer().gethandCardByIdx(0).getId()]);
-        handcard2.setImageResource(allCardFace[newgame.getActivePlayer().gethandCardByIdx(1).getId()]);
-        handcard3.setImageResource(allCardFace[newgame.getActivePlayer().gethandCardByIdx(2).getId()]);
-        handcard4.setImageResource(allCardFace[newgame.getActivePlayer().gethandCardByIdx(3).getId()]);
-        handcard5.setImageResource(allCardFace[newgame.getActivePlayer().gethandCardByIdx(4).getId()]);
-        handcard6.setImageResource(allCardFace[newgame.getActivePlayer().gethandCardByIdx(5).getId()]);
-        handcard7.setImageResource(allCardFace[newgame.getActivePlayer().gethandCardByIdx(6).getId()]);
-        handcard8.setImageResource(allCardFace[newgame.getActivePlayer().gethandCardByIdx(7).getId()]);
+        for (int i = 0; i < 8; i++) {
+            ImageButton cardButton = cardView(newgame.getActivePlayer().gethandCardByIdx(i).getId());
+            playerHandRegion.addView(cardButton);
+        }
+    }
 
-        playerHandRegion.addView(handcard1);
-        playerHandRegion.addView(handcard2);
-        playerHandRegion.addView(handcard3);
-        playerHandRegion.addView(handcard4);
-        playerHandRegion.addView(handcard5);
-        playerHandRegion.addView(handcard6);
-        playerHandRegion.addView(handcard7);
-        playerHandRegion.addView(handcard8);
+        public ImageButton cardView(int cardId) {
+            ImageButton show = new ImageButton(this);
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)show.getLayoutParams();
+            params.height = dp2px(this,80);
+            params.width = dp2px(this,60);
+            show.setLayoutParams(params);
+            show.setImageResource(allCardFace[cardId]);
+
+            return show;
+        }
+
+        public static int dp2px(Context context, float dpValue) {
+            final float scale = context.getResources().getDisplayMetrics().density;
+            return (int) (dpValue * scale + 0.5f);
         }
 }
