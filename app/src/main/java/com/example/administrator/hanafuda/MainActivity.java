@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.mainGame);
+        setContentView(R.layout.maingame);
         RelativeLayout playerHandRegion = findViewById(R.id.mainView);
         allCardFace = new int[48];
         allCardFace[0] = R.drawable.cardface10;
@@ -67,22 +67,19 @@ public class MainActivity extends AppCompatActivity {
 
         Game newgame = new Game();
         newgame.grantCard(8);
+        ImageButton[] buttons = new ImageButton[8];
         for (int i = 0; i < 8; i++) {
-            ImageButton cardButton = cardView(newgame.getActivePlayer().gethandCardByIdx(i).getId());
-            playerHandRegion.addView(cardButton);
-        }
-    }
-
-        public ImageButton cardView(int cardId) {
-            ImageButton show = new ImageButton(this);
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)show.getLayoutParams();
+            buttons[i] = new ImageButton(this);
+            buttons[i].setImageResource(allCardFace[newgame.getActivePlayer().gethandCardByIdx(i).getId()]);
+            buttons[i].setScaleType(ImageButton.ScaleType.FIT_XY);
+            playerHandRegion.addView(buttons[i]);
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) buttons[i].getLayoutParams();
             params.height = dp2px(this,80);
             params.width = dp2px(this,60);
-            show.setLayoutParams(params);
-            show.setImageResource(allCardFace[cardId]);
-
-            return show;
+            params.leftMargin = dp2px(this,20+40*i);
+            buttons[i].setLayoutParams(params);
         }
+    }
 
         public static int dp2px(Context context, float dpValue) {
             final float scale = context.getResources().getDisplayMetrics().density;
