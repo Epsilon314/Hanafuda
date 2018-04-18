@@ -7,9 +7,10 @@ package com.example.administrator.hanafuda;
 public class Field {
     private  Card[] fieldCard;
     private int fieldCardNum;
+    private int fieldCardMax = 16;
 
     public Field() {
-        fieldCard = new Card[16];
+        fieldCard = new Card[fieldCardMax];
         fieldCardNum = 0;
     }
 
@@ -27,7 +28,14 @@ public class Field {
         }
     }
 
-    public void addCard(Card newCard, Player activePlayer) {
+    public boolean fillField(Card newCard) {
+        if (fieldCardNum == fieldCardMax) return false;
+        fieldCard[fieldCardNum++] = newCard;
+        return true;
+    }
+
+    public boolean addCard(Card newCard, Player activePlayer) {
+        if (fieldCardNum == fieldCardMax) return false;
         int[] possibleCombo = new int[4];
         int comboCount = 0;
         if (isEmpty()) fieldCard[fieldCardNum++] = newCard;
@@ -51,6 +59,7 @@ public class Field {
                 this.rmCard(possibleCombo[0]);
             }
         }
+        return true;
     }
 
 }

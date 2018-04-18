@@ -22,14 +22,13 @@ public class MainGameActivity extends AppCompatActivity {
         newgame = new Game();
         gui = new GameGuiUtils();
 
-        newgame.grantCard(8);
-        handCardView = new ImageButton[newgame.getActivePlayer().gethandCount()];
-
+        newgame.gameStart();
         updateHandCardView();
 
     }
 
     public void updateHandCardView() {
+        handCardView = new ImageButton[newgame.getActivePlayer().gethandCount()];
         gameRegion.removeAllViews();
         for (int i = 0; i < newgame.getActivePlayer().gethandCount(); i++) {
             handCardView[i] = new ImageButton(this);

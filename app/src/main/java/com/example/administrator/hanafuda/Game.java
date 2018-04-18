@@ -12,7 +12,8 @@ public class Game {
     private Player player2;
     private Player activeplayer;
     private Combination[] combinationRule;
-    private int combRuleCount;
+    private int initHandCardCount = 8;
+    private int initFieldCardCount = 6;
 
     public Game() {
         deck = new Deck();
@@ -44,6 +45,17 @@ public class Game {
         }
     }
 
+    public void gameStart() {
+        grantCard(initHandCardCount);
+        changeActiveplayer();
+        grantCard(initHandCardCount);
+        changeActiveplayer();
+        for (int i = 0; i < initFieldCardCount; i++) {
+            Card card = deck.DrawCard();
+            field.fillField(card);
+        }
+    }
+
     public Player getActivePlayer() {
         return activeplayer;
     }
@@ -51,5 +63,13 @@ public class Game {
     public void changeActiveplayer() {
         if (activeplayer == player1) activeplayer = player2;
         else activeplayer = player1;
+    }
+
+    public void changeRuleInitHandCount(int count) {
+        initHandCardCount = count;
+    }
+
+    public void changeRuleInitFieldCount(int count) {
+        initFieldCardCount = count;
     }
 }
