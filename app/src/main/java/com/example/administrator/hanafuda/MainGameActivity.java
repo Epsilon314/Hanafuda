@@ -62,8 +62,8 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
             fieldCardView[i].setImageResource(guiUtils.getRidByCardId(newGame.getField().getCardIdByIdx(i)));
             rows[i%2].addView(fieldCardView[i]);
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) fieldCardView[i].getLayoutParams();
-            params.height = guiUtils.dp2px(this,80);
-            params.width = guiUtils.dp2px(this,50);
+            params.height = guiUtils.dp2px(this,72);
+            params.width = guiUtils.dp2px(this,54);
             fieldCardView[i].setLayoutParams(params);
         }
         fieldRegion.addView(rows[0]);
