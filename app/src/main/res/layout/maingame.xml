@@ -9,18 +9,12 @@
     tools:context="com.example.administrator.hanafuda.MainGameActivity">
 
     <TableLayout
+        android:id="@+id/field"
         android:layout_width="360dp"
         android:layout_height="160dp"
         android:layout_centerInParent="true"
         >
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
     </TableLayout>
+
 </RelativeLayout>

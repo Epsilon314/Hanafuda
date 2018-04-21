@@ -56,6 +56,13 @@ public class Game {
         }
     }
 
+    public void playCardRound(int cardId) {
+        Card playedCard = activeplayer.playerPlayCard(cardId);
+        field.addCard(playedCard,activeplayer);
+        Card drawCard = deck.DrawCard();
+        field.addCard(drawCard,activeplayer);
+    }
+
     public Player getActivePlayer() {
         return activeplayer;
     }
@@ -71,5 +78,9 @@ public class Game {
 
     public void changeRuleInitFieldCount(int count) {
         initFieldCardCount = count;
+    }
+
+    public Field getField() {
+        return field;
     }
 }

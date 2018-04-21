@@ -35,7 +35,7 @@ public class Player {
          if (handCardByIdx >= handCount) return null;
          else {
               Card pCard = handCard[handCardByIdx];
-              for (int i = handCardByIdx; i < handCount; i++) {
+              for (int i = handCardByIdx; i < handCount - 1; i++) {
                   handCard[i] = handCard[i + 1];
               }
               handCount--;

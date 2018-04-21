@@ -1,17 +1,25 @@
 package com.example.administrator.hanafuda;
 
 import android.content.Context;
+import android.provider.Telephony;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 
-public class MainGameActivity extends AppCompatActivity {
+public class MainGameActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageButton[] handCardView;
+    private ImageView[] fieldCardView;
     private RelativeLayout gameRegion;
-    private Game newgame;
-    private GameGuiUtils gui;
+    private TableLayout fieldRegion;
+    private Game newGame;
+    private GameGuiUtils guiUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,35 +27,71 @@ public class MainGameActivity extends AppCompatActivity {
         setContentView(R.layout.maingame);
 
         gameRegion = findViewById(R.id.mainView);
-        newgame = new Game();
-        gui = new GameGuiUtils();
+        fieldRegion = findViewById(R.id.field);
+        newGame = new Game();
+        guiUtils = new GameGuiUtils();
 
-        newgame.gameStart();
+        newGame.gameStart();
         updateHandCardView();
+        updateFieldCardView();
+    }
 
+    public void onClick(View v) {
+        int cardId = v.getId();
+        int playerHandCount = newGame.getActivePlayer().gethandCount();
+        for (int i = 0; i < playerHandCount; i++) {
+            if (cardId == newGame.getActivePlayer().gethandCardByIdx(i).getId()) {
+                newGame.playCardRound(i);
+                break;
+            }
+        }
+        updateHandCardView();
+        updateFieldCardView();
+    }
+
+    public void updateFieldCardView() {
+        int fieldcount = newGame.getField().getFieldCardCount();
+        fieldCardView = new ImageView[fieldcount];
+        TableRow[] rows = new TableRow[2];
+        rows[0] = new TableRow(this);
+        rows[1] = new TableRow(this);
+        fieldRegion.removeAllViews();
+        for (int i = 0; i < fieldcount; i++) {
+            fieldCardView[i] = new ImageView(this);
+            fieldCardView[i].setScaleType(ImageView.ScaleType.FIT_XY);
+            fieldCardView[i].setImageResource(guiUtils.getRidByCardId(newGame.getField().getCardIdByIdx(i)));
+            rows[i%2].addView(fieldCardView[i]);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) fieldCardView[i].getLayoutParams();
+            params.height = guiUtils.dp2px(this,80);
+            params.width = guiUtils.dp2px(this,50);
+            fieldCardView[i].setLayoutParams(params);
+        }
+        fieldRegion.addView(rows[0]);
+        fieldRegion.addView(rows[1]);
     }
 
     public void updateHandCardView() {
-        handCardView = new ImageButton[newgame.getActivePlayer().gethandCount()];
-        gameRegion.removeAllViews();
-        for (int i = 0; i < newgame.getActivePlayer().gethandCount(); i++) {
+        if (handCardView != null) {
+            for (int i = 0; i < handCardView.length; i++) {
+                gameRegion.removeView(handCardView[i]);
+            }
+        }
+        int handCardCount = newGame.getActivePlayer().gethandCount();
+        handCardView = new ImageButton[handCardCount];
+        for (int i = 0; i < handCardCount; i++) {
             handCardView[i] = new ImageButton(this);
             handCardView[i].setScaleType(ImageButton.ScaleType.FIT_XY);
-            handCardView[i].setImageResource(gui.getRidByCardId(newgame.getActivePlayer().gethandCardByIdx(i).getId()));
+            handCardView[i].setImageResource(guiUtils.getRidByCardId(newGame.getActivePlayer().gethandCardByIdx(i).getId()));
+            handCardView[i].setId(newGame.getActivePlayer().gethandCardByIdx(i).getId());
+            handCardView[i].setOnClickListener(this);
             gameRegion.addView(handCardView[i]);
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) handCardView[i].getLayoutParams();
-            params.height = dp2px(this,80);
-            params.width = dp2px(this,60);
-            params.leftMargin = dp2px(this,5+55*i);
-            params.bottomMargin = dp2px(this,5);
+            params.height = guiUtils.dp2px(this, 80);
+            params.width = guiUtils.dp2px(this, 60);
+            params.leftMargin = guiUtils.dp2px(this, 5 + 55 * i);
+            params.bottomMargin = guiUtils.dp2px(this, 5);
             params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
             handCardView[i].setLayoutParams(params);
         }
     }
-
-    public static int dp2px(Context context, float dpValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
-    }
-
 }

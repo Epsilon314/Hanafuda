@@ -21,7 +21,7 @@ public class Field {
     public void rmCard(int rmCardByIdx) {
         if (rmCardByIdx < fieldCardNum) {
             Card rmCard = fieldCard[rmCardByIdx];
-            for (int i = rmCardByIdx; i < fieldCardNum; i++) {
+            for (int i = rmCardByIdx; i < fieldCardNum - 1; i++) {
                 fieldCard[i] = fieldCard[i+1];
             }
             fieldCardNum--;
@@ -60,6 +60,14 @@ public class Field {
             }
         }
         return true;
+    }
+
+    public int getCardIdByIdx(int idx) {
+        return fieldCard[idx].getId();
+    }
+
+    public int getFieldCardCount() {
+        return fieldCardNum;
     }
 
 }
