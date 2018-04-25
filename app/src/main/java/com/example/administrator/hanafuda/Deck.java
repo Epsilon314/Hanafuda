@@ -48,4 +48,8 @@ public class Deck {
             lastIdx--;
         }
     }
+
+    public int getRemainCardNum() {
+        return remainCardNum;
+    }
 }

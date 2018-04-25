@@ -10,14 +10,12 @@ public class Player {
     private int handCount;
     private int ownCount;
     private int point;
-    private int ownValue;
     private Combination[] combinations;
     private int combCount;
 
     public Player(int startpoint, Combination[] combinations) {
         handCard = new Card[8];
         ownCard = new Card[48];
-        ownValue = 0;
         handCount = 0;
         point = startpoint;
         combCount = combinations.length;
@@ -71,5 +69,9 @@ public class Player {
     public Card getOwnCardByIdx(int idx) {
         if (idx < ownCount) return ownCard[idx];
         else return null;
+    }
+
+    public int getPoint() {
+        return point;
     }
 }

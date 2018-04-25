@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 public class MainGameActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -19,6 +20,9 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     private TableLayout fieldRegion;
     private TableRow[] playerOwnRegion;
     private TableRow[] opponentOwnRegion;
+    private TextView playerPoint;
+    private TextView opponentPoint;
+    private TextView deckRemain;
     private Game newGame;
     private GameGuiUtils guiUtils;
     private NaiveComputerPlayer computerPlayer;
@@ -42,7 +46,9 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         opponentOwnRegion[2] = findViewById(R.id.oown3);
         opponentOwnRegion[3] = findViewById(R.id.oown4);
         opponentOwnRegion[4] = findViewById(R.id.oown5);
-
+        playerPoint = findViewById(R.id.playerpoint);
+        opponentPoint = findViewById(R.id.opponentpoint);
+        deckRemain = findViewById(R.id.remainedcard);
 
         newGame = new Game();
         guiUtils = new GameGuiUtils();
@@ -73,6 +79,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         updateHandCardView();
         updateFieldCardView();
         updateAllOwnCardView();
+        updateAllTextView();
     }
 
     public void updateFieldCardView() {
@@ -155,5 +162,14 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
             params.width = guiUtils.dp2px(this,24);
             ownCardView[i].setLayoutParams(params);
         }
+    }
+
+    public void updateAllTextView() {
+        String playerPointString = String.format("Player Point %d",newGame.getPlayer().getPoint());
+        String oppoPointString = String.format("Opponent Point %d",newGame.getOpponent().getPoint());
+        String remainDeckCardString = String.format("%d card(s) in deck",newGame.getDeckRemain());
+        playerPoint.setText(playerPointString);
+        opponentPoint.setText(oppoPointString);
+        deckRemain.setText(remainDeckCardString);
     }
 }
