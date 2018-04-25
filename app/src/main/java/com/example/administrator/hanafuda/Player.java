@@ -57,12 +57,19 @@ public class Player {
         }
     }
 
-    public int gethandCount() {
+    public int getHandCount() {
         return handCount;
     }
 
-    public Card gethandCardByIdx (int idx) {
+    public int getOwnCount() {return ownCount;}
+
+    public Card getHandCardByIdx(int idx) {
         if (idx < handCount) return handCard[idx];
+        else return null;
+    }
+
+    public Card getOwnCardByIdx(int idx) {
+        if (idx < ownCount) return ownCard[idx];
         else return null;
     }
 }

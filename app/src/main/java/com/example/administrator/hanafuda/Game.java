@@ -8,9 +8,9 @@ public class Game {
     private int combRuleAmount = 4;
     private Deck deck;
     private Field field;
-    private Player player1;
-    private Player player2;
-    private Player activeplayer;
+    private Player player;
+    private Player opponent;
+    private Player activePlayer;
     private Combination[] combinationRule;
     private int initHandCardCount = 8;
     private int initFieldCardCount = 6;
@@ -33,15 +33,15 @@ public class Game {
         for (int i = 0; i < combRuleAmount; i++) {
             combinationRule[i] = new Combination(combName[i], requiredCardId[i], requiredCardCount[i], basePoint[i], allowExtra[i]);
         }
-        player1 = new Player(0,combinationRule);
-        player2 = new Player(0,combinationRule);
-        activeplayer = player1;
+        player = new Player(0,combinationRule);
+        opponent = new Player(0,combinationRule);
+        activePlayer = player;
     }
 
     public void grantCard(int number) {
         for (int i = 0; i < number; i++) {
             Card card = deck.DrawCard();
-            activeplayer.playerDraw(card);
+            activePlayer.playerDraw(card);
         }
     }
 
@@ -57,19 +57,19 @@ public class Game {
     }
 
     public void playCardRound(int cardId) {
-        Card playedCard = activeplayer.playerPlayCard(cardId);
-        field.addCard(playedCard,activeplayer);
+        Card playedCard = activePlayer.playerPlayCard(cardId);
+        field.addCard(playedCard, activePlayer);
         Card drawCard = deck.DrawCard();
-        field.addCard(drawCard,activeplayer);
+        field.addCard(drawCard, activePlayer);
     }
 
     public Player getActivePlayer() {
-        return activeplayer;
+        return activePlayer;
     }
 
     public void changeActiveplayer() {
-        if (activeplayer == player1) activeplayer = player2;
-        else activeplayer = player1;
+        if (activePlayer == player) activePlayer = opponent;
+        else activePlayer = player;
     }
 
     public void changeRuleInitHandCount(int count) {
@@ -82,5 +82,9 @@ public class Game {
 
     public Field getField() {
         return field;
+    }
+
+    public Boolean isPlayerActive() {
+        return activePlayer == player;
     }
 }
