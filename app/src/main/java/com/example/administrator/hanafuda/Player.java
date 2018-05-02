@@ -12,12 +12,13 @@ public class Player {
     private int point;
     private Combination[] combinations;
     private int combCount;
+    private boolean meetGameEndRequirements;
 
-    public Player(int startpoint, Combination[] combinations) {
+    public Player(int startPoint, Combination[] combinations) {
         handCard = new Card[8];
         ownCard = new Card[48];
         handCount = 0;
-        point = startpoint;
+        point = startPoint;
         combCount = combinations.length;
         this.combinations = new Combination[combCount];
         for (int i = 0; i < combCount; i++) {
@@ -48,10 +49,14 @@ public class Player {
 
     public void updateOwnedValue(Card newOwnedCard) {
         //whenever got a new card, update the combination state
-        point = 0;
+        int newPoint = 0;
         for (int i = 0; i < combCount; i++) {
             combinations[i].inCombination(newOwnedCard.getId());
-            if(combinations[i].isComplete()) point += combinations[i].getPoint();
+            if(combinations[i].isComplete()) newPoint += combinations[i].getPoint();
+        }
+        if (newPoint > point) {
+            point = newPoint;
+            meetGameEndRequirements = true;
         }
     }
 
@@ -73,5 +78,13 @@ public class Player {
 
     public int getPoint() {
         return point;
+    }
+
+    public void giveUpEndGame() {
+        meetGameEndRequirements = false;
+    }
+
+    public boolean isMeetGameEndRequirements() {
+        return meetGameEndRequirements;
     }
 }

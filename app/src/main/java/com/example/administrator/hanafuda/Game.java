@@ -15,6 +15,7 @@ public class Game {
     private Combination[] combinationRule2;
     private int initHandCardCount = 8;
     private int initFieldCardCount = 6;
+    private boolean gameActive;
 
     public Game() {
         deck = new Deck();
@@ -42,6 +43,7 @@ public class Game {
         player = new Player(0,combinationRule1);
         opponent = new Player(0,combinationRule2);
         activePlayer = player;
+        gameActive = true;
     }
 
     public void grantCard(int number) {
@@ -101,4 +103,11 @@ public class Game {
     public Boolean isPlayerActive() {
         return activePlayer == player;
     }
+
+    public void endGame() {
+        gameActive = false;
+    }
+
+    public boolean isGameActive()  {return gameActive;}
+
 }

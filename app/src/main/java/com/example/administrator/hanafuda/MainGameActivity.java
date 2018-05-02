@@ -1,5 +1,7 @@
 package com.example.administrator.hanafuda;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -59,7 +61,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void onClick(View v) {
-        if (newGame.isPlayerActive()) {
+        if (newGame.isPlayerActive() && newGame.isGameActive() ) {
             int cardId = v.getId();
             int playerHandCount = newGame.getActivePlayer().getHandCount();
             for (int i = 0; i < playerHandCount; i++) {
@@ -68,9 +70,18 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                     break;
                 }
             }
+            if (newGame.getActivePlayer().isMeetGameEndRequirements()) {
+                showEndGameDiag();
+            }
             newGame.changeActiveplayer();
-            computerPlayer.playCard(newGame);
+            computerPlayer.randomPlayCard(newGame);
+            if (newGame.getActivePlayer().isMeetGameEndRequirements()) {
+                computerPlayer.chooseEndGame(newGame);
+            }
             newGame.changeActiveplayer();
+            if (!newGame.isGameActive()) {
+                //Todo:game over view
+            }
             updateAllView();
         }
     }
@@ -171,5 +182,25 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         playerPoint.setText(playerPointString);
         opponentPoint.setText(oppoPointString);
         deckRemain.setText(remainDeckCardString);
+    }
+
+    public void showEndGameDiag() {
+        final AlertDialog.Builder endGameDiag = new AlertDialog.Builder(this);
+        endGameDiag.setTitle("End Game?");
+        endGameDiag.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        newGame.endGame();
+                    }
+                });
+        endGameDiag.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        newGame.getActivePlayer().giveUpEndGame();
+                    }
+                });
+        endGameDiag.show();
     }
 }
