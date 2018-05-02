@@ -10,20 +10,15 @@ public class Player {
     private int handCount;
     private int ownCount;
     private int point;
-    private Combination[] combinations;
-    private int combCount;
+    private Rules rules;
     private boolean meetGameEndRequirements;
 
-    public Player(int startPoint, Combination[] combinations) {
+    public Player(int startPoint, Rules mRules) {
         handCard = new Card[8];
         ownCard = new Card[48];
         handCount = 0;
         point = startPoint;
-        combCount = combinations.length;
-        this.combinations = new Combination[combCount];
-        for (int i = 0; i < combCount; i++) {
-            this.combinations[i] = combinations[i];
-        }
+        rules = mRules;
     }
 
     public void playerDraw(Card drawCard) {
@@ -50,10 +45,8 @@ public class Player {
     public void updateOwnedValue(Card newOwnedCard) {
         //whenever got a new card, update the combination state
         int newPoint = 0;
-        for (int i = 0; i < combCount; i++) {
-            combinations[i].inCombination(newOwnedCard.getId());
-            if(combinations[i].isComplete()) newPoint += combinations[i].getPoint();
-        }
+        rules.checkAllRules(newOwnedCard.getId());
+        newPoint = rules.sumUpPoints();
         if (newPoint > point) {
             point = newPoint;
             meetGameEndRequirements = true;
