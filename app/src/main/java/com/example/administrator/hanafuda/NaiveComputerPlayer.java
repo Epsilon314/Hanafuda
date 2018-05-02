@@ -9,10 +9,18 @@ import java.util.Random;
 public class NaiveComputerPlayer {
 
     public NaiveComputerPlayer() {}
-    void playCard(Game currentGame) {
-        int handCount = currentGame.getActivePlayer().getHandCount();
-        Random rand = new Random();
-        int playCardIdx = rand.nextInt(handCount);
-        currentGame.playCardRound(playCardIdx);
+    void randomPlayCard(Game currentGame) {
+        if (currentGame.isGameActive()) {
+            int handCount = currentGame.getActivePlayer().getHandCount();
+            Random rand = new Random();
+            int playCardIdx = rand.nextInt(handCount);
+            currentGame.playCardRound(playCardIdx);
+        }
+    }
+
+    void chooseEndGame(Game currentGame) {
+        if (currentGame.isGameActive()) {
+            currentGame.endGame();
+        }
     }
 }
