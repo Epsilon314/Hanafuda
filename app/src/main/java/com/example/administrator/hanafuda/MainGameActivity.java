@@ -30,6 +30,8 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     private GameGuiUtils guiUtils;
     private NaiveComputerPlayer computerPlayer;
     private int gameMode = Game.GameMode.SINGLEPLAYER;
+    private GameMessage.initMessage initMsg;
+    private GameMessage.stepMessage stepMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +65,15 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     public void gameStart() {
         switch (newGame.mode.getMode()) {
             case Game.GameMode.SINGLEPLAYER:
-                newGame.gameStart();
+                newGame.gameStartSingle();
                 updateAllView();
                 break;
             case Game.GameMode.MULTIPLAYER_WIFI:
+                /**
+                 * Todo:start a multi-player game
+                 */
+                newGame.gameStartMultiplayer(initMsg);
+                updateAllView();
                 break;
             default:
                 break;

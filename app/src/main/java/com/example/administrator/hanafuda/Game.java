@@ -81,8 +81,35 @@ public class Game {
         rules2 = new Rules(ruleAmount,rule2);
         player = new Player(0, rules1);
         opponent = new Player(0, rules2);
-        activePlayer = player;
         gameActive = true;
+    }
+
+    public void gameStartSingle() {
+        /**
+         * deliver initial hand-card and field card
+         */
+        deck.initDeck();
+        activePlayer = player;
+        grantCard(initHandCardCount);
+        changeActiveplayer();
+        grantCard(initHandCardCount);
+        changeActiveplayer();
+        for (int i = 0; i < initFieldCardCount; i++) {
+            Card card = deck.DrawCard();
+            field.fillField(card);
+        }
+    }
+
+    public void gameStartMultiplayer(GameMessage.initMessage msg) {
+        /**
+         * Todo: multi-player game start negotiation
+         */
+        deck.copyDeck(msg);
+        activePlayer = GameMessage.initMessage.YOUFIRST == msg.getWhoFirst() ? player : opponent;
+        if (isPlayerActive()) {
+            deck.initDeck();
+
+        }
     }
 
     public void grantCard(int number) {
@@ -92,20 +119,6 @@ public class Game {
         for (int i = 0; i < number; i++) {
             Card card = deck.DrawCard();
             activePlayer.playerDraw(card);
-        }
-    }
-
-    public void gameStart() {
-        /**
-         * deliver initial hand-card and field card
-         */
-        grantCard(initHandCardCount);
-        changeActiveplayer();
-        grantCard(initHandCardCount);
-        changeActiveplayer();
-        for (int i = 0; i < initFieldCardCount; i++) {
-            Card card = deck.DrawCard();
-            field.fillField(card);
         }
     }
 

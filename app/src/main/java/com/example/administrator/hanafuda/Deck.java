@@ -8,26 +8,44 @@ import java.util.Random;
  */
 
 public class Deck {
+    public static final int DECKMAX = 48;
     private Card[] dcard;
     private int remainCardNum;
 
     public Deck() {
         /**
-         * create a deck with 48 cards and shuffle
+         * create a deck
          */
-        dcard = new Card[48];
-        remainCardNum = 48;
+        dcard = new Card[DECKMAX];
+        remainCardNum = DECKMAX;
+    }
+
+    public void initDeck() {
+        /**
+         * init the deck with 48 cards and shuffle
+         */
         for (int m = 1; m <= 12; m++) {
             for (int d = 0; d <=3; d++) {
                 dcard[4*m-4+d] = new Card(m,d);
             }
-     }
-     Shuffle();
-     Shuffle();
-     Shuffle();
-     /**
-      * important things do three times
-      */
+        }
+        Shuffle();
+        Shuffle();
+        Shuffle();
+        /**
+         * important things do three times
+         */
+    }
+
+    public void copyDeck(GameMessage.initMessage msg) {
+        dcard = new Card[DECKMAX];
+        remainCardNum = DECKMAX;
+        for (int i = 0; i < DECKMAX; i++) {
+            int id = msg.getDeckCardIdByIdx(i);
+            int d = id % 4;
+            int m = (id - d + 4) / 4;
+            dcard[i] = new Card(m,d);
+        }
     }
 
     public Card DrawCard() {
