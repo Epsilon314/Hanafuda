@@ -1,6 +1,7 @@
 package com.example.administrator.hanafuda;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -62,6 +63,10 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
 
     public void onClick(View v) {
         if (newGame.isPlayerActive() && newGame.isGameActive() ) {
+
+            /*
+            * if it is player's turn in a active game
+            * and the player click a card*/
             int cardId = v.getId();
             int playerHandCount = newGame.getActivePlayer().getHandCount();
             for (int i = 0; i < playerHandCount; i++) {
@@ -70,17 +75,30 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                     break;
                 }
             }
-            if (newGame.getActivePlayer().isMeetGameEndRequirements()) {
+            if (checkGameAutoEnd()) {
+                endGame(newGame);
+            }
+            if (newGame.getActivePlayer().isMeetGameEndRequirements() && newGame.isGameActive()) {
                 showEndGameDiag();
             }
+
+            /*
+            *computer player's turn start */
+
             newGame.changeActiveplayer();
             computerPlayer.randomPlayCard(newGame);
+            if (checkGameAutoEnd()) {
+                endGame(newGame);
+            }
+            if (newGame.getActivePlayer().isMeetGameEndRequirements() && newGame.isGameActive()) {
+                showEndGameDiag();
+            }
             if (newGame.getActivePlayer().isMeetGameEndRequirements()) {
                 computerPlayer.chooseEndGame(newGame);
             }
             newGame.changeActiveplayer();
             if (!newGame.isGameActive()) {
-                //Todo:game over view
+                showGameOverDiag();
             }
             updateAllView();
         }
@@ -191,7 +209,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        newGame.endGame();
+                        endGame(newGame);
                     }
                 });
         endGameDiag.setNegativeButton("No",
@@ -202,5 +220,44 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                     }
                 });
         endGameDiag.show();
+    }
+
+    public void endGame(Game game) {
+        game.endGame();
+        showGameOverDiag();
+    }
+
+    public void showGameOverDiag() {
+        String gameEndScore = String.format("Your score: %d \nOpponent score: %d",
+                newGame.getPlayer().getPoint(),newGame.getOpponent().getPoint());
+        final AlertDialog.Builder gameOverDiag = new AlertDialog.Builder(this);
+        gameOverDiag.setTitle("Gameover");
+        gameOverDiag.setMessage(gameEndScore);
+        gameOverDiag.setPositiveButton("Rematch",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //Todo: start a new game
+                        restartMainGameActivity();
+                    }
+                });
+        gameOverDiag.setNegativeButton("Back to menu"
+                , new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //Todo: back to menu activity
+                    }
+                });
+        gameOverDiag.show();
+    }
+
+    public boolean checkGameAutoEnd() {
+        return  newGame.getPlayer().getHandCount() == 0 && newGame.getOpponent().getHandCount() == 0;
+    }
+
+    private void restartMainGameActivity() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 }
