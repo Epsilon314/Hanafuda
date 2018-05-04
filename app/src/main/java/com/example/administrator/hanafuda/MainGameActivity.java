@@ -97,16 +97,13 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                 if (checkGameAutoEnd()) {
                     endGame(newGame);
                 }
-                if (newGame.getActivePlayer().isMeetGameEndRequirements() && newGame.isGameActive()) {
-                    showEndGameDiag();
-                }
                 if (newGame.getActivePlayer().isMeetGameEndRequirements()) {
                     computerPlayer.chooseEndGame(newGame);
                 }
-                newGame.changeActiveplayer();
                 if (!newGame.isGameActive()) {
                     showGameOverDiag();
                 }
+                newGame.changeActiveplayer();
                 updateAllView();
             }
         }
@@ -218,6 +215,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     public void showEndGameDiag() {
         final AlertDialog.Builder endGameDiag = new AlertDialog.Builder(this);
         endGameDiag.setTitle("End Game?");
+        endGameDiag.setCancelable(false);
         endGameDiag.setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -246,6 +244,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         final AlertDialog.Builder gameOverDiag = new AlertDialog.Builder(this);
         gameOverDiag.setTitle("Gameover");
         gameOverDiag.setMessage(gameEndScore);
+        gameOverDiag.setCancelable(false);
         gameOverDiag.setPositiveButton("Rematch",
                 new DialogInterface.OnClickListener() {
                     @Override

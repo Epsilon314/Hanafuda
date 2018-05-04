@@ -11,7 +11,6 @@ public class Game {
         public static final int MULTIPLAYER_WIFI = 1;
         private int mode;
         public GameMode(int mode) {this.mode = mode;}
-        public void setGameMode(int mode) {this.mode = mode;}
         public int getMode() {return mode;}
     }
 
