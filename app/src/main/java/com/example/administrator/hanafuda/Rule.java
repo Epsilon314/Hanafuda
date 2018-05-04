@@ -13,30 +13,40 @@ public class Rule {
     private boolean complete;
     private int basePoint;
     private int extraPoint;
+    /**
+     * if the combination allow you to collect more than required cards to gain extra point
+     */
     private boolean allowExtra;
+    /**
+     * some rules will block certain rules by making them inactive after being completed
+     */
     private boolean active = true;
     private int[] coveredRulesId;
     private int coveredRulesCount;
-    /* if the combination allow you to collect more than required cards to gain extra point */
 
     public Rule(int id, String combName, int[] requiredCardId, int requiredCardCount, int basePoint,
                 boolean allowExtra, int[] coveredRulesId, int coveredRulesCount) {
         alreadyHadCardCount = 0;
         complete = false;
+
         this.ruleId = id;
         this.basePoint = basePoint;
         this.extraPoint = 0;
         this.combName = combName;
         this.allowExtra = allowExtra;
+
         this.requiredCardCount = requiredCardCount;
         this.requiredCardId = new int[requiredCardCount];
         for (int i = 0; i < requiredCardCount; i++) {
             this.requiredCardId[i] = requiredCardId[i];
         }
+
         this.coveredRulesCount = coveredRulesCount;
+        this.coveredRulesId = new int[coveredRulesCount];
         for (int i = 0; i < coveredRulesCount; i++) {
             this.coveredRulesId[i] = coveredRulesId[i];
         }
+
     }
 
     public boolean inCombination(int cardID) {

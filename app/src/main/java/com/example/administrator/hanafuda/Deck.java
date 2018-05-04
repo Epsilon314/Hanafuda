@@ -12,6 +12,9 @@ public class Deck {
     private int remainCardNum;
 
     public Deck() {
+        /**
+         * create a deck with 48 cards and shuffle
+         */
         dcard = new Card[48];
         remainCardNum = 48;
         for (int m = 1; m <= 12; m++) {
@@ -21,11 +24,18 @@ public class Deck {
      }
      Shuffle();
      Shuffle();
-     Shuffle();//important things do three times
+     Shuffle();
+     /**
+      * important things do three times
+      */
     }
 
     public Card DrawCard() {
-        if (remainCardNum > 0) {
+        /**
+         * draw card from deck
+         * return the card drown if the deck is not empty, otherwise return null
+         */
+        if (!isEmpty()) {
             return dcard[--remainCardNum];
         }
         return null;
@@ -35,7 +45,7 @@ public class Deck {
         return remainCardNum == 0;
     }
 
-    public void Shuffle() {
+    private void Shuffle() {
         int lastIdx = remainCardNum - 1;
         int swapIdx;
         Card swapCard;

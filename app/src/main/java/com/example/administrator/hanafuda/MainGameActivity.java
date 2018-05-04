@@ -29,6 +29,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     private Game newGame;
     private GameGuiUtils guiUtils;
     private NaiveComputerPlayer computerPlayer;
+    private int gameMode = Game.GameMode.SINGLEPLAYER;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         opponentPoint = findViewById(R.id.opponentpoint);
         deckRemain = findViewById(R.id.remainedcard);
 
-        newGame = new Game();
+        newGame = new Game(gameMode);
         guiUtils = new GameGuiUtils();
         computerPlayer = new NaiveComputerPlayer();
 
@@ -62,45 +63,57 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void onClick(View v) {
-        if (newGame.isPlayerActive() && newGame.isGameActive() ) {
+        if (newGame.mode.getMode() == Game.GameMode.SINGLEPLAYER) {
+            /**
+             * event callback for single player mode
+             */
+            if (newGame.isPlayerActive() && newGame.isGameActive() ) {
 
-            /*
-            * if it is player's turn in a active game
-            * and the player click a card*/
-            int cardId = v.getId();
-            int playerHandCount = newGame.getActivePlayer().getHandCount();
-            for (int i = 0; i < playerHandCount; i++) {
-                if (cardId == newGame.getActivePlayer().getHandCardByIdx(i).getId()) {
-                    newGame.playCardRound(i);
-                    break;
+                /**
+                 * if it is player's turn in a active game
+                 * and the player click a card
+                 */
+                int cardId = v.getId();
+                int playerHandCount = newGame.getActivePlayer().getHandCount();
+                for (int i = 0; i < playerHandCount; i++) {
+                    if (cardId == newGame.getActivePlayer().getHandCardByIdx(i).getId()) {
+                        newGame.playCardRound(i);
+                        break;
+                    }
                 }
-            }
-            if (checkGameAutoEnd()) {
-                endGame(newGame);
-            }
-            if (newGame.getActivePlayer().isMeetGameEndRequirements() && newGame.isGameActive()) {
-                showEndGameDiag();
-            }
+                if (checkGameAutoEnd()) {
+                    endGame(newGame);
+                }
+                if (newGame.getActivePlayer().isMeetGameEndRequirements() && newGame.isGameActive()) {
+                    showEndGameDiag();
+                }
 
-            /*
-            *computer player's turn start */
+                /**
+                 *computer player's turn start
+                 */
 
-            newGame.changeActiveplayer();
-            computerPlayer.randomPlayCard(newGame);
-            if (checkGameAutoEnd()) {
-                endGame(newGame);
+                newGame.changeActiveplayer();
+                computerPlayer.randomPlayCard(newGame);
+                if (checkGameAutoEnd()) {
+                    endGame(newGame);
+                }
+                if (newGame.getActivePlayer().isMeetGameEndRequirements() && newGame.isGameActive()) {
+                    showEndGameDiag();
+                }
+                if (newGame.getActivePlayer().isMeetGameEndRequirements()) {
+                    computerPlayer.chooseEndGame(newGame);
+                }
+                newGame.changeActiveplayer();
+                if (!newGame.isGameActive()) {
+                    showGameOverDiag();
+                }
+                updateAllView();
             }
-            if (newGame.getActivePlayer().isMeetGameEndRequirements() && newGame.isGameActive()) {
-                showEndGameDiag();
-            }
-            if (newGame.getActivePlayer().isMeetGameEndRequirements()) {
-                computerPlayer.chooseEndGame(newGame);
-            }
-            newGame.changeActiveplayer();
-            if (!newGame.isGameActive()) {
-                showGameOverDiag();
-            }
-            updateAllView();
+        }
+        else if (newGame.mode.getMode() == Game.GameMode.MULTIPLAYER_WIFI) {
+            /**
+             * Todo:multi-player click event
+             */
         }
     }
 
