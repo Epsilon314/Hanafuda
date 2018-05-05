@@ -100,15 +100,33 @@ public class Game {
         }
     }
 
-    public void gameStartMultiplayer(GameMessage.initMessage msg) {
+    public void gameStartMultiplayer(GameMessage.initMessage msg, boolean isServer) {
         /**
          * Todo: multi-player game start negotiation
          */
-        deck.copyDeck(msg);
-        activePlayer = GameMessage.initMessage.YOUFIRST == msg.getWhoFirst() ? player : opponent;
-        if (isPlayerActive()) {
+        if (isServer) {
             deck.initDeck();
-
+            activePlayer = opponent;
+            grantCard(initHandCardCount);
+            changeActiveplayer();
+            grantCard(initHandCardCount);
+            changeActiveplayer();
+            for (int i = 0; i < initFieldCardCount; i++) {
+                Card card = deck.DrawCard();
+                field.fillField(card);
+            }
+        }
+        else {
+            deck.copyDeck(msg);
+            activePlayer = player;
+            grantCard(initHandCardCount);
+            changeActiveplayer();
+            grantCard(initHandCardCount);
+            changeActiveplayer();
+            for (int i = 0; i < initFieldCardCount; i++) {
+                Card card = deck.DrawCard();
+                field.fillField(card);
+            }
         }
     }
 
@@ -156,6 +174,8 @@ public class Game {
     public Field getField() {
         return field;
     }
+
+    public Deck getDeck() {return deck;}
 
     public int getDeckRemain() {
         return deck.getRemainCardNum();

@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 public class GameMessage {
 
-    public class initMessage implements Serializable {
+    public static class initMessage implements Serializable {
         private static final long serialVersionUID = 1L;
         public static final transient int YOUFIRST = 0;
         public static final transient int MEFIRST = 1;
@@ -35,7 +35,7 @@ public class GameMessage {
 
     }
 
-    public class stepMessage implements Serializable {
+    public static class stepMessage implements Serializable {
         private static final long serialVersionUID = 2L;
         private int playedCardId;
 

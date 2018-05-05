@@ -80,4 +80,8 @@ public class Deck {
     public int getRemainCardNum() {
         return remainCardNum;
     }
+
+    public int getCardIdByIdx(int idx) {
+        return dcard[idx].getId();
+    }
 }

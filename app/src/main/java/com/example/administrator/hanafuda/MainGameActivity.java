@@ -2,6 +2,7 @@ package com.example.administrator.hanafuda;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,7 +32,9 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     private NaiveComputerPlayer computerPlayer;
     private int gameMode = Game.GameMode.SINGLEPLAYER;
     private GameMessage.initMessage initMsg;
-    private GameMessage.stepMessage stepMsg;
+    private GameMessage.stepMessage sendMsg;
+    private GameMessage.stepMessage receiveMsg;
+    private static final boolean isServer = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         newGame = new Game(gameMode);
         guiUtils = new GameGuiUtils();
         computerPlayer = new NaiveComputerPlayer();
+
         gameStart();
     }
 
@@ -70,10 +74,26 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case Game.GameMode.MULTIPLAYER_WIFI:
                 /**
-                 * Todo:start a multi-player game
+                 * start a multi-player game
                  */
-                newGame.gameStartMultiplayer(initMsg);
-                updateAllView();
+                if (isServer) {
+                    initMsg = new GameMessage.initMessage(GameMessage.initMessage.YOUFIRST);
+                    newGame.gameStartMultiplayer(initMsg,isServer);
+                    for (int i = 0; i < Deck.DECKMAX; i++) {
+                        initMsg.writeDeckCardIdByIdx(i,newGame.getDeck().getCardIdByIdx(i));
+                    }
+                    /**
+                     * Todo:send msg
+                     */
+                    updateAllView();
+                }
+                else {
+                    /**
+                     * Todo:receive msg
+                     */
+                    newGame.gameStartMultiplayer(initMsg,isServer);
+                    updateAllView();
+                }
                 break;
             default:
                 break;
@@ -131,6 +151,27 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                 /**
                  * Todo:multi-player click event
                  */
+                if (newGame.isPlayerActive() && newGame.isGameActive()) {
+                    int cardId = v.getId();
+                    int playerHandCount = newGame.getActivePlayer().getHandCount();
+                    for (int i = 0; i < playerHandCount; i++) {
+                        if (cardId == newGame.getActivePlayer().getHandCardByIdx(i).getId()) {
+                            newGame.playCardRound(i);
+                            break;
+                        }
+                    }
+                    if (checkGameAutoEnd()) {
+                        endGame(newGame);
+                    }
+                    if (newGame.getActivePlayer().isMeetGameEndRequirements() && newGame.isGameActive()) {
+                        showEndGameDiag();
+                    }
+                    newGame.changeActiveplayer();
+                    sendMsg = new GameMessage.stepMessage(cardId);
+                    /**
+                     * Todo send sendMsg
+                     */
+                }
                 break;
             }
             default:
@@ -273,7 +314,9 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //Todo: start a new game
+                        /**
+                         * start a new game
+                         */
                         restartMainGameActivity();
                     }
                 });
