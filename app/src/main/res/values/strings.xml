@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Hanafuda</string>
+
+    <string name="offline">offline</string>
+    <string name="online">online</string>
+
+    <string name="ipInput">Please input the other player\'s ip</string>
+    <string name="yourIp">your ip</string>
+    <string name="inputText">ip</string>
+    <string name="clientButton">client</string>
+    <string name="serverButton">server</string>
 </resources>

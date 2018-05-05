@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainGameActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -35,6 +37,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     private GameMessage.stepMessage sendMsg;
     private GameMessage.stepMessage receiveMsg;
     private static final boolean isServer = true;
+    private long exitTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -338,5 +341,21 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         Intent intent = getIntent();
         finish();
         startActivity(intent);
+    }
+    
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                Toast.makeText(MainGameActivity.this,"再按一次回到登录界面",Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                finish();
+                System.exit(0);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode,event);
     }
 }

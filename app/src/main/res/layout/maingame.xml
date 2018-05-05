@@ -8,6 +8,16 @@
     android:orientation="vertical"
     tools:context="com.example.administrator.hanafuda.MainGameActivity">
 
+
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        app:srcCompat="@mipmap/gamebackground" />
+
     <TableLayout
         android:id="@+id/field"
         android:layout_width="360dp"
@@ -42,7 +52,8 @@
         android:layout_width="120dp"
         android:layout_height="160dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentEnd="true"
+        android:id="@+id/tableLayout">
 
         <TableRow
             android:id="@+id/pown1"
