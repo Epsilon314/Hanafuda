@@ -8,8 +8,14 @@ public class Field {
     private  Card[] fieldCard;
     private int fieldCardNum;
     private int fieldCardMax = 16;
+    /**
+     * currently we assume field card will not exceed 16, which is guaranteed by game rules
+     */
 
     public Field() {
+        /**
+         * start from a empty field
+         */
         fieldCard = new Card[fieldCardMax];
         fieldCardNum = 0;
     }
@@ -19,6 +25,9 @@ public class Field {
     }
 
     public void rmCard(int rmCardByIdx) {
+        /**
+         * remove card from field
+         */
         if (rmCardByIdx < fieldCardNum) {
             Card rmCard = fieldCard[rmCardByIdx];
             for (int i = rmCardByIdx; i < fieldCardNum - 1; i++) {
@@ -29,12 +38,18 @@ public class Field {
     }
 
     public boolean fillField(Card newCard) {
+        /**
+         * put card on field, don't do any other work
+         */
         if (fieldCardNum == fieldCardMax) return false;
         fieldCard[fieldCardNum++] = newCard;
         return true;
     }
 
     public boolean addCard(Card newCard, Player activePlayer) {
+        /**
+         * add a card to the field, and check if it led to a combo
+         */
         if (fieldCardNum == fieldCardMax) return false;
         int[] possibleCombo = new int[4];
         int comboCount = 0;
@@ -52,8 +67,10 @@ public class Field {
                 this.rmCard(possibleCombo[0]);
             }
             else {
-                //get player selection
-                //to be done
+                /**
+                 * Todo:get player selection
+                 * now we simply choose a card for the player
+                 */
                 activePlayer.playerGive(fieldCard[possibleCombo[0]]);
                 activePlayer.playerGive(newCard);
                 this.rmCard(possibleCombo[0]);

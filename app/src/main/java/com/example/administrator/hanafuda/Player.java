@@ -5,12 +5,21 @@ package com.example.administrator.hanafuda;
  */
 
 public class Player {
+    /**
+     * player has two card region, hand and owned
+     * each player store their rules separately
+     */
     private Card[] handCard;
     private Card[] ownCard;
     private int handCount;
     private int ownCount;
     private int point;
     private Rules rules;
+    /**
+     * once you complete a combination, you can end the game
+     * while you can also choose not to end the game aiming at more points
+     * in this case you must complete another combination to regain the right to end the game
+     */
     private boolean meetGameEndRequirements;
 
     public Player(int startPoint, Rules mRules) {
@@ -43,7 +52,9 @@ public class Player {
     }
 
     public void updateOwnedValue(Card newOwnedCard) {
-        //whenever got a new card, update the combination state
+        /**
+         * whenever got a new card, update the combination state
+         */
         int newPoint = 0;
         rules.checkAllRules(newOwnedCard.getId());
         newPoint = rules.sumUpPoints();

@@ -1,6 +1,7 @@
 package com.example.administrator.hanafuda;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +29,9 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     private Game newGame;
     private GameGuiUtils guiUtils;
     private NaiveComputerPlayer computerPlayer;
+    private int gameMode = Game.GameMode.SINGLEPLAYER;
+    private GameMessage.initMessage initMsg;
+    private GameMessage.stepMessage stepMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,37 +56,85 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         opponentPoint = findViewById(R.id.opponentpoint);
         deckRemain = findViewById(R.id.remainedcard);
 
-        newGame = new Game();
+        newGame = new Game(gameMode);
         guiUtils = new GameGuiUtils();
         computerPlayer = new NaiveComputerPlayer();
+        gameStart();
+    }
 
-        newGame.gameStart();
-        updateAllView();
+    public void gameStart() {
+        switch (newGame.mode.getMode()) {
+            case Game.GameMode.SINGLEPLAYER:
+                newGame.gameStartSingle();
+                updateAllView();
+                break;
+            case Game.GameMode.MULTIPLAYER_WIFI:
+                /**
+                 * Todo:start a multi-player game
+                 */
+                newGame.gameStartMultiplayer(initMsg);
+                updateAllView();
+                break;
+            default:
+                break;
+        }
     }
 
     public void onClick(View v) {
-        if (newGame.isPlayerActive() && newGame.isGameActive() ) {
-            int cardId = v.getId();
-            int playerHandCount = newGame.getActivePlayer().getHandCount();
-            for (int i = 0; i < playerHandCount; i++) {
-                if (cardId == newGame.getActivePlayer().getHandCardByIdx(i).getId()) {
-                    newGame.playCardRound(i);
-                    break;
+        switch (newGame.mode.getMode()) {
+            case Game.GameMode.SINGLEPLAYER: {
+                /**
+                 * event callback for single player mode
+                 */
+                if (newGame.isPlayerActive() && newGame.isGameActive()) {
+
+                    /**
+                     * if it is player's turn in a active game
+                     * and the player click a card
+                     */
+                    int cardId = v.getId();
+                    int playerHandCount = newGame.getActivePlayer().getHandCount();
+                    for (int i = 0; i < playerHandCount; i++) {
+                        if (cardId == newGame.getActivePlayer().getHandCardByIdx(i).getId()) {
+                            newGame.playCardRound(i);
+                            break;
+                        }
+                    }
+                    if (checkGameAutoEnd()) {
+                        endGame(newGame);
+                    }
+                    if (newGame.getActivePlayer().isMeetGameEndRequirements() && newGame.isGameActive()) {
+                        showEndGameDiag();
+                    }
+
+                    /**
+                     *computer player's turn start
+                     */
+
+                    newGame.changeActiveplayer();
+                    computerPlayer.randomPlayCard(newGame);
+                    if (checkGameAutoEnd()) {
+                        endGame(newGame);
+                    }
+                    if (newGame.getActivePlayer().isMeetGameEndRequirements()) {
+                        computerPlayer.chooseEndGame(newGame);
+                    }
+                    if (!newGame.isGameActive()) {
+                        showGameOverDiag();
+                    }
+                    newGame.changeActiveplayer();
+                    updateAllView();
                 }
+                break;
             }
-            if (newGame.getActivePlayer().isMeetGameEndRequirements()) {
-                showEndGameDiag();
+            case Game.GameMode.MULTIPLAYER_WIFI: {
+                /**
+                 * Todo:multi-player click event
+                 */
+                break;
             }
-            newGame.changeActiveplayer();
-            computerPlayer.randomPlayCard(newGame);
-            if (newGame.getActivePlayer().isMeetGameEndRequirements()) {
-                computerPlayer.chooseEndGame(newGame);
-            }
-            newGame.changeActiveplayer();
-            if (!newGame.isGameActive()) {
-                //Todo:game over view
-            }
-            updateAllView();
+            default:
+                break;
         }
     }
 
@@ -187,11 +239,12 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     public void showEndGameDiag() {
         final AlertDialog.Builder endGameDiag = new AlertDialog.Builder(this);
         endGameDiag.setTitle("End Game?");
+        endGameDiag.setCancelable(false);
         endGameDiag.setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        newGame.endGame();
+                        endGame(newGame);
                     }
                 });
         endGameDiag.setNegativeButton("No",
@@ -202,5 +255,45 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                     }
                 });
         endGameDiag.show();
+    }
+
+    public void endGame(Game game) {
+        game.endGame();
+        showGameOverDiag();
+    }
+
+    public void showGameOverDiag() {
+        String gameEndScore = String.format("Your score: %d \nOpponent score: %d",
+                newGame.getPlayer().getPoint(),newGame.getOpponent().getPoint());
+        final AlertDialog.Builder gameOverDiag = new AlertDialog.Builder(this);
+        gameOverDiag.setTitle("Gameover");
+        gameOverDiag.setMessage(gameEndScore);
+        gameOverDiag.setCancelable(false);
+        gameOverDiag.setPositiveButton("Rematch",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //Todo: start a new game
+                        restartMainGameActivity();
+                    }
+                });
+        gameOverDiag.setNegativeButton("Back to menu"
+                , new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //Todo: back to menu activity
+                    }
+                });
+        gameOverDiag.show();
+    }
+
+    public boolean checkGameAutoEnd() {
+        return  newGame.getPlayer().getHandCount() == 0 && newGame.getOpponent().getHandCount() == 0;
+    }
+
+    private void restartMainGameActivity() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 }

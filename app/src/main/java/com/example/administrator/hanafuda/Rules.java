@@ -19,6 +19,9 @@ public class Rules {
         for (int i = 0; i < ruleCount; i++) {
             rules[i].inCombination(cardID);
             if(rules[i].isComplete()) {
+                /**
+                 * after a rule is completed, block rules indicated in coveredRuleId attribute
+                 */
                 for (int j = 0; j < rules[i].getCoveredRulesCount();j++) {
                     for (int k = 0; k < ruleCount; k++) {
                         if (rules[i].getCoveredRuleId(j) == rules[k].getRuleId()) rules[k].cover();

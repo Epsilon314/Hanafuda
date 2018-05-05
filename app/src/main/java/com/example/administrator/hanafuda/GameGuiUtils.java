@@ -13,6 +13,9 @@ public class GameGuiUtils {
     private int[] allCardFace;
 
     public GameGuiUtils() {
+        /**
+         * organize game image source in id order
+         */
         allCardFace = new int[48];
         allCardFace[0] = R.drawable.cardface10;
         allCardFace[1] = R.drawable.cardface11;
@@ -69,6 +72,9 @@ public class GameGuiUtils {
     }
 
     public static int dp2px(Context context, float dpValue) {
+        /**
+         * covert dp value to px value
+         */
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
