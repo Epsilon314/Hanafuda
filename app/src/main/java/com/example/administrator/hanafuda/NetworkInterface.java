@@ -173,6 +173,7 @@ public class NetworkInterface {
                     }
                     outputStream.close();
                     inputStream.close();
+                    flag = false;
                 }
                 catch (InterruptedException e) {}
                 catch (IOException e) {}
@@ -234,7 +235,11 @@ public class NetworkInterface {
         return -1;
     }
 
-    public boolean isConneted(){return mSocket.isConnected();}
+    public boolean isConneted(){
+        if(mSocket==null){
+            return false;
+        }
+        else return mSocket.isConnected();}
 
 }
 
