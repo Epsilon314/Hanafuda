@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Hanafuda</string>
 
-    <string name="offline">Single Player</string>
-    <string name="online">Online</string>
+    <string name="offline">单\n人\n模\n式</string>
+    <string name="online">在\n线\n模\n式</string>
+    <string name="help">帮\n助</string>
+    <string name="about">关\n于</string>
 
     <string name="ipInput">Please input the other player\'s ip</string>
     <string name="yourIp">your ip</string>
