@@ -104,7 +104,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                      * send msg
                      */
                     byte[] send = guiUtils.serialize(initMsg);
-                    while(networkInterface.isConneted()) {}
+                    while(!networkInterface.isConneted()) {}
                     networkInterface.dataWrite(send);
                     updateAllView();
                 }

@@ -173,7 +173,6 @@ public class NetworkInterface {
                     }
                     outputStream.close();
                     inputStream.close();
-                    flag = false;
                 }
                 catch (InterruptedException e) {}
                 catch (IOException e) {}
