@@ -9,7 +9,6 @@ import java.net.Socket;
 
 
 public class NetworkInterface {
-    private Socket mClient;
     private ServerSocket mServer;
     private Socket mSocket = null;
     private String ip = NetworkActivity.inputIP;
@@ -44,8 +43,8 @@ public class NetworkInterface {
 
             while (!Thread.currentThread().isInterrupted()) {
                 try{
-                    mClient = new Socket();
-                    mClient.connect(new InetSocketAddress(ip, 8888), 10000); // hard-code server address
+                    mSocket = new Socket();
+                    mSocket.connect(new InetSocketAddress(ip, 8888), 10000); // hard-code server address
                 }catch(Exception e){flag = false;System.out.println("Connect fail!");}
 
                 try {
@@ -56,8 +55,8 @@ public class NetworkInterface {
                     byte[] buff = new byte[4];
                     int len = 0;
                     String msg;
-                    inputStream = new BufferedInputStream(mClient.getInputStream());
-                    outputStream = new BufferedOutputStream(mClient.getOutputStream());
+                    inputStream = new BufferedInputStream(mSocket.getInputStream());
+                    outputStream = new BufferedOutputStream(mSocket.getOutputStream());
                     outputStream.write(1);
                     outputStream.flush();
                 /*Connecting*/
@@ -68,7 +67,7 @@ public class NetworkInterface {
                         MainGameActivity.connected = true;
                         break;
                     }
-                    while (mClient.isConnected()){
+                    while (mSocket.isConnected()){
                         if (needToSend){
                             outputStream.write(buffer);
                             outputStream.flush();
@@ -151,7 +150,7 @@ public class NetworkInterface {
     }
 
     public synchronized boolean dataWrite(byte [] send){
-        if(mClient.isConnected()){
+        if(mSocket.isConnected()){
             sendIsCompleted = false;
             buffer = new byte [512];
             buffer = send;
@@ -166,7 +165,7 @@ public class NetworkInterface {
     }
 
     public synchronized int dataRead(byte [] read){
-        if(mClient.isConnected()){
+        if(mSocket.isConnected()){
             readIsCompleted = false;
             needToRead = true;
             while(!readIsCompleted){}
@@ -182,7 +181,7 @@ public class NetworkInterface {
         }
     }
 
-    public boolean isConneted(){return mClient.isConnected();}
+    public boolean isConneted(){return mSocket.isConnected();}
 
 }
 
