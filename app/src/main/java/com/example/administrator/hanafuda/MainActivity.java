@@ -1,5 +1,6 @@
 package com.example.administrator.hanafuda;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
@@ -18,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
 
         Button offline = findViewById(R.id.offline);
         Button online = findViewById(R.id.online);
+        Button help = findViewById(R.id.help);
+        Button about = findViewById(R.id.about);
 
         offline.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,5 +39,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        help.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showHelpDiag();
+            }
+        });
+
+        about.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+    }
+
+    public void showHelpDiag() {
+        final AlertDialog.Builder help = new AlertDialog.Builder(this);
+        help.show();
     }
 }

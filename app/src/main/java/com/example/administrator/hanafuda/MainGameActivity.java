@@ -36,7 +36,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     /**
      * single player by default
      */
-    private int gameMode = Game.GameMode.SINGLEPLAYER;
+    private int gameMode = MainActivity.isOffline ? Game.GameMode.SINGLEPLAYER : Game.GameMode.MULTIPLAYER_WIFI;
 
     private GameMessage.initMessage initMsg;
     private GameMessage.stepMessage sendMsg;
