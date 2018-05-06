@@ -11,5 +11,5 @@
     <string name="inputText">对手的IP</string>
     <string name="clientButton">加入游戏</string>
     <string name="serverButton">创建游戏</string>
-    <string name="helpcontent"><a href="https://github.com/Epsilon314/Hanafuda">github</a></string>
+    <string name="helpcontent">遇到问题去这修改：<a href="https://github.com/Epsilon314/Hanafuda">github</a></string>
 </resources>
