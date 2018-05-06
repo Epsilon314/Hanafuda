@@ -290,9 +290,9 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void updateAllTextView() {
-        String playerPointString = String.format("Player Point %d",newGame.getPlayer().getPoint());
-        String oppoPointString = String.format("Opponent Point %d",newGame.getOpponent().getPoint());
-        String remainDeckCardString = String.format("%d card(s) in deck",newGame.getDeckRemain());
+        String playerPointString = String.format("玩家得分 %d",newGame.getPlayer().getPoint());
+        String oppoPointString = String.format("对手得分 %d",newGame.getOpponent().getPoint());
+        String remainDeckCardString = String.format("卡堆中还剩%d张牌",newGame.getDeckRemain());
         playerPoint.setText(playerPointString);
         opponentPoint.setText(oppoPointString);
         deckRemain.setText(remainDeckCardString);
@@ -300,12 +300,12 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
 
     public void showEndGameDiag() {
         final AlertDialog.Builder endGameDiag = new AlertDialog.Builder(this);
-        endGameDiag.setTitle("End Game?");
+        endGameDiag.setTitle("结束游戏?");
         /**
          * restrict the players from cancelling the dialog
          */
         endGameDiag.setCancelable(false);
-        endGameDiag.setPositiveButton("Yes",
+        endGameDiag.setPositiveButton("是",
                 /**
                  * end the game
                  */
@@ -315,7 +315,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                         endGame(newGame);
                     }
                 });
-        endGameDiag.setNegativeButton("No",
+        endGameDiag.setNegativeButton("否",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -334,13 +334,13 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void showGameOverDiag() {
-        String gameEndScore = String.format("Your score: %d \nOpponent score: %d",
+        String gameEndScore = String.format("你的得分: %d \n对手的得分: %d",
                 newGame.getPlayer().getPoint(),newGame.getOpponent().getPoint());
         final AlertDialog.Builder gameOverDiag = new AlertDialog.Builder(this);
-        gameOverDiag.setTitle("Gameover");
+        gameOverDiag.setTitle("游戏结束");
         gameOverDiag.setMessage(gameEndScore);
         gameOverDiag.setCancelable(false);
-        gameOverDiag.setPositiveButton("Rematch",
+        gameOverDiag.setPositiveButton("再来一局",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -350,7 +350,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                         restartMainGameActivity();
                     }
                 });
-        gameOverDiag.setNegativeButton("Back to menu"
+        gameOverDiag.setNegativeButton("返回菜单"
                 , new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

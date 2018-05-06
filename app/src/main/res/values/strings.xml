@@ -6,9 +6,9 @@
     <string name="help">帮\n助</string>
     <string name="about">关\n于</string>
 
-    <string name="ipInput">Please input the other player\'s ip</string>
-    <string name="yourIp">your ip</string>
-    <string name="inputText">ip</string>
-    <string name="clientButton">Join game</string>
-    <string name="serverButton">Start game</string>
+    <string name="ipInput">请输入对手的IP</string>
+    <string name="yourIp">你的IP</string>
+    <string name="inputText">对手的IP</string>
+    <string name="clientButton">加入游戏</string>
+    <string name="serverButton">创建游戏</string>
 </resources>
