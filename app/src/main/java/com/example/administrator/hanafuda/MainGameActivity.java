@@ -43,6 +43,8 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     private static final boolean isServer = true;
     private long exitTime = 0;
 
+    public static boolean connected = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
