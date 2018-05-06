@@ -5,7 +5,7 @@ package com.example.administrator.hanafuda;
  */
 public class Rules {
     /**
-     * rule set 
+     * rule set
      */
     private Rule[] rules;
     private int ruleCount;

@@ -34,8 +34,8 @@
 
     <Button
         android:id="@+id/clientButton"
-        android:layout_width="75dp"
-        android:layout_height="37dp"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
         android:layout_marginBottom="16dp"
         android:layout_marginStart="140dp"
         android:text="@string/clientButton"
@@ -44,8 +44,8 @@
 
     <Button
         android:id="@+id/serverButton"
-        android:layout_width="75dp"
-        android:layout_height="37dp"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="140dp"
         android:text="@string/serverButton"
