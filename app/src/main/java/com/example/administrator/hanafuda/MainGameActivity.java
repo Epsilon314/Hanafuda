@@ -41,7 +41,6 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     private GameMessage.initMessage initMsg;
     private GameMessage.stepMessage sendMsg;
     private GameMessage.stepMessage receiveMsg;
-    private static final boolean isServer = true;
     private long exitTime = 0;
 
     public static boolean connected = false;
@@ -89,12 +88,12 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                 /**
                  * start a multi-player game
                  */
-                if (isServer) {
+                if (NetworkActivity.isServer) {
                     /**
                      * runs server programs
                      */
                     initMsg = new GameMessage.initMessage(GameMessage.initMessage.YOUFIRST);
-                    newGame.gameStartMultiplayer(initMsg,isServer);
+                    newGame.gameStartMultiplayer(initMsg,NetworkActivity.isServer);
                     for (int i = 0; i < Deck.DECKMAX; i++) {
                         initMsg.writeDeckCardIdByIdx(i,newGame.getDeck().getCardIdByIdx(i));
                     }
@@ -113,7 +112,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                     byte[] buff = new byte[512];
                     networkInterface.dataRead(buff);
                     initMsg = (GameMessage.initMessage) guiUtils.unserialize(buff);
-                    newGame.gameStartMultiplayer(initMsg,isServer);
+                    newGame.gameStartMultiplayer(initMsg,NetworkActivity.isServer);
                     updateAllView();
                 }
                 break;
