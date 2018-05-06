@@ -1,9 +1,15 @@
 package com.example.administrator.hanafuda;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  * Created by Administrator on 2018/4/18.
@@ -78,4 +84,34 @@ public class GameGuiUtils {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
+
+    @Nullable
+    public static byte[] serialize(Object obj) {
+        ObjectOutputStream os = null;
+        ByteArrayOutputStream bs = null;
+        try {
+            bs = new ByteArrayOutputStream();
+            os = new ObjectOutputStream(bs);
+            os.writeObject(obj);
+            byte[] array = bs.toByteArray();
+            return array;
+        }
+        catch (Exception e) {
+
+        }
+        return null;
+    }
+
+    public static Object unserialize(byte[] bytes) {
+        ByteArrayInputStream bais = null;
+        try {
+            bais = new ByteArrayInputStream(bytes);
+            ObjectInputStream ois = new ObjectInputStream(bais);
+            return ois.readObject();
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
+
 }

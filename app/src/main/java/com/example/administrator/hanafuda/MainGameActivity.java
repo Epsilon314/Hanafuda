@@ -31,6 +31,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     private Game newGame;
     private GameGuiUtils guiUtils;
     private NaiveComputerPlayer computerPlayer;
+    private NetworkInterface networkInterface = new NetworkInterface(NetworkActivity.isServer,NetworkActivity.isClient);
 
     /**
      * single player by default
@@ -98,15 +99,20 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                         initMsg.writeDeckCardIdByIdx(i,newGame.getDeck().getCardIdByIdx(i));
                     }
                     /**
-                     * Todo:send msg
+                     * send msg
                      */
+                    byte[] send = guiUtils.serialize(initMsg);
+                    networkInterface.dataWrite(send);
                     updateAllView();
                 }
                 else {
                     /**
                      * runs client programs
-                     * Todo:receive msg
+                     * receive msg
                      */
+                    byte[] buff = new byte[512];
+                    networkInterface.dataRead(buff);
+                    initMsg = (GameMessage.initMessage) guiUtils.unserialize(buff);
                     newGame.gameStartMultiplayer(initMsg,isServer);
                     updateAllView();
                 }
@@ -188,8 +194,10 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                     newGame.changeActiveplayer();
                     sendMsg = new GameMessage.stepMessage(cardId);
                     /**
-                     * Todo send sendMsg
+                     * send sendMsg
                      */
+                    byte[] sent = guiUtils.serialize(sendMsg);
+                    networkInterface.dataWrite(sent);
                 }
                 break;
             }
