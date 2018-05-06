@@ -39,6 +39,9 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     private static final boolean isServer = true;
     private long exitTime = 0;
 
+    public static boolean connected = false;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -342,7 +345,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         finish();
         startActivity(intent);
     }
-    
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK
