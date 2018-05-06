@@ -51,6 +51,9 @@ public class Field {
          * add a card to the field, and check if it led to a combo
          */
         if (fieldCardNum == fieldCardMax) return false;
+        /**
+         * there are four cards in same month, so at most four combos
+         */
         int[] possibleCombo = new int[4];
         int comboCount = 0;
         if (isEmpty()) fieldCard[fieldCardNum++] = newCard;

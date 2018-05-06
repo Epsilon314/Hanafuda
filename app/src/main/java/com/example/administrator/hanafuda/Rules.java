@@ -4,6 +4,9 @@ package com.example.administrator.hanafuda;
  * Created by Administrator on 2018/4/12.
  */
 public class Rules {
+    /**
+     * rule set 
+     */
     private Rule[] rules;
     private int ruleCount;
 

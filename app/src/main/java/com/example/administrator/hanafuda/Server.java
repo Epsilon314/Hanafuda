@@ -1,8 +1,5 @@
 package com.example.administrator.hanafuda;
 
-/**
- * Created by BOOK on 2018/5/5.
- */
 
 import android.support.annotation.Nullable;
 

@@ -7,6 +7,9 @@ import android.graphics.Bitmap;
  */
 
 public class Card {
+    /**
+     * a hanafuda card has two values, whose combination is unique
+     */
     private int month;
     private int detail;
     private int id;

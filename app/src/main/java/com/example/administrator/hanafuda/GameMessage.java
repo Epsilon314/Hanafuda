@@ -7,6 +7,10 @@ import java.io.Serializable;
  */
 
 public class GameMessage {
+    /**
+     * message to start the game and to synchronize the game step
+     * can be serialized and transported though socket
+     */
 
     public static class initMessage implements Serializable {
         private static final long serialVersionUID = 1L;

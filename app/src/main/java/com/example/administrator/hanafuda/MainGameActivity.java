@@ -2,7 +2,6 @@ package com.example.administrator.hanafuda;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,7 +31,12 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     private Game newGame;
     private GameGuiUtils guiUtils;
     private NaiveComputerPlayer computerPlayer;
+
+    /**
+     * single player by default
+     */
     private int gameMode = Game.GameMode.SINGLEPLAYER;
+
     private GameMessage.initMessage initMsg;
     private GameMessage.stepMessage sendMsg;
     private GameMessage.stepMessage receiveMsg;
@@ -70,6 +74,9 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void gameStart() {
+        /**
+         * decide how to start the game by game mode
+         */
         switch (newGame.mode.getMode()) {
             case Game.GameMode.SINGLEPLAYER:
                 newGame.gameStartSingle();
@@ -80,6 +87,9 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                  * start a multi-player game
                  */
                 if (isServer) {
+                    /**
+                     * runs server programs
+                     */
                     initMsg = new GameMessage.initMessage(GameMessage.initMessage.YOUFIRST);
                     newGame.gameStartMultiplayer(initMsg,isServer);
                     for (int i = 0; i < Deck.DECKMAX; i++) {
@@ -92,6 +102,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                 }
                 else {
                     /**
+                     * runs client programs
                      * Todo:receive msg
                      */
                     newGame.gameStartMultiplayer(initMsg,isServer);
@@ -104,6 +115,9 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void onClick(View v) {
+        /**
+         * when the player click a card
+         */
         switch (newGame.mode.getMode()) {
             case Game.GameMode.SINGLEPLAYER: {
                 /**
@@ -152,7 +166,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
             }
             case Game.GameMode.MULTIPLAYER_WIFI: {
                 /**
-                 * Todo:multi-player click event
+                 * multi-player click event
                  */
                 if (newGame.isPlayerActive() && newGame.isGameActive()) {
                     int cardId = v.getId();
@@ -183,6 +197,10 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void updateAllView() {
+        /**
+         * update the game view
+         * modify this function if add more views that needs updating
+         */
         updateHandCardView();
         updateFieldCardView();
         updateAllOwnCardView();
@@ -283,8 +301,14 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     public void showEndGameDiag() {
         final AlertDialog.Builder endGameDiag = new AlertDialog.Builder(this);
         endGameDiag.setTitle("End Game?");
+        /**
+         * restrict the players from cancelling the dialog
+         */
         endGameDiag.setCancelable(false);
         endGameDiag.setPositiveButton("Yes",
+                /**
+                 * end the game
+                 */
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -302,6 +326,9 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void endGame(Game game) {
+        /**
+         * will disable the game and show score dialog
+         */
         game.endGame();
         showGameOverDiag();
     }
@@ -327,13 +354,19 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
                 , new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //Todo: back to menu activity
+                        finish();
+                        /**
+                         * back to menu activity
+                         */
                     }
                 });
         gameOverDiag.show();
     }
 
     public boolean checkGameAutoEnd() {
+        /**
+         * if both player run out of hand cards, the game is ended automatically
+         */
         return  newGame.getPlayer().getHandCount() == 0 && newGame.getOpponent().getHandCount() == 0;
     }
 

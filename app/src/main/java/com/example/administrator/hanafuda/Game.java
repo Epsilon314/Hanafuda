@@ -7,6 +7,10 @@ package com.example.administrator.hanafuda;
 public class Game {
 
     public static final class GameMode {
+        /**
+         * game mode
+         * decide how we start the game
+         */
         public static final int SINGLEPLAYER = 0;
         public static final int MULTIPLAYER_WIFI = 1;
         private int mode;
@@ -20,13 +24,24 @@ public class Game {
     private Field field;
     private Player player;
     private Player opponent;
+
+    /**
+     * whom turn
+     */
     private Player activePlayer;
+
     private Rules rules1;
     private Rules rules2;
     private Rule[] rule1;
     private Rule[] rule2;
+
+    /**
+     * default game parameters
+     * maybe changed if we develop more game modes
+     */
     private int initHandCardCount = 8;
     private int initFieldCardCount = 6;
+
     private boolean gameActive;
 
     public Game(int mode) {
@@ -69,8 +84,10 @@ public class Game {
         int[] coveredRuleCount = {0,0,0,0,0,0,0,0,0,0,0,0,0};
         int[][] coveredRuleId = {
                 {}, {}, {}, {}, {}, {}, {},{},{},{},{},{},{}
-        };//Todo:this is not checked, simply all assign blank, actually some rules may cover other rules and need to be edited
-
+        };
+        /**
+         * Todo:this is not checked, simply all assign blank, actually some rules may cover other rules and need to be edited
+         */
         for (int i = 0; i < ruleAmount; i++) {
             rule1[i] = new Rule(ruleId[i],ruleName[i], requiredCardId[i], requiredCardCount[i],
                     basePoint[i], allowExtra[i],coveredRuleId[i],coveredRuleCount[i]);
@@ -102,9 +119,13 @@ public class Game {
 
     public void gameStartMultiplayer(GameMessage.initMessage msg, boolean isServer) {
         /**
-         * Todo: multi-player game start negotiation
+         * multi-player game start negotiation
          */
         if (isServer) {
+            /**
+             * the server generate the deck and send it to his opponent
+             * game starts from client's turn
+             */
             deck.initDeck();
             activePlayer = opponent;
             grantCard(initHandCardCount);
@@ -117,6 +138,10 @@ public class Game {
             }
         }
         else {
+            /**
+             * the client copy the deck from msg
+             * game starts from client's turn
+             */
             deck.copyDeck(msg);
             activePlayer = player;
             grantCard(initHandCardCount);

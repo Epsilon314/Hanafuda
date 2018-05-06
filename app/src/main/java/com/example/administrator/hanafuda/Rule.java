@@ -50,6 +50,10 @@ public class Rule {
     }
 
     public boolean inCombination(int cardID) {
+        /**
+         * check if the given card is part of this combination
+         * store it if its in the combination
+         */
         for (int i = 0; i < requiredCardCount; i++) {
             if (requiredCardId[i] == cardID) {
                 alreadyHadCardCount++;
