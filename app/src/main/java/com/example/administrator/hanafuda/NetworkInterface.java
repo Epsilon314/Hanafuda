@@ -21,10 +21,11 @@ public class NetworkInterface {
     private static boolean readIsCompleted = false;
     private byte [] buffer;
     private int size;
+    private Server serverThread;
+    private Client clientThread;
 
     NetworkInterface (boolean isServer, boolean isClient){
-        Server serverThread;
-        Client clientThread;
+
         if(isServer && !isClient){
             serverThread = new Server();
             serverThread.start();
@@ -89,6 +90,37 @@ public class NetworkInterface {
             }
 
         }
+        public synchronized boolean dataWrite(byte [] send){
+            if(mSocket.isConnected()){
+                sendIsCompleted = false;
+                buffer = new byte [512];
+                buffer = send;
+                needToSend = true;
+                while(!sendIsCompleted){}
+                return true;
+            }
+            else {
+                System.out.println("Connection is closed.");
+                return false;
+            }
+        }
+
+        public synchronized int dataRead(byte [] read){
+            if(mSocket.isConnected()){
+                readIsCompleted = false;
+                needToRead = true;
+                while(!readIsCompleted){}
+                int len = size;
+                for (int i = 0;i < len;++i){
+                    read[i]=buffer[i];
+                }
+                return len;
+            }
+            else{
+                System.out.println("Connection is closed.");
+                return -1;
+            }
+        }
 
     }
 
@@ -146,39 +178,60 @@ public class NetworkInterface {
                 catch (IOException e) {}
             }
         }
-
+        public synchronized boolean dataWrite(byte [] send){
+            if(mSocket.isConnected()){
+                sendIsCompleted = false;
+                buffer = new byte [512];
+                buffer = send;
+                needToSend = true;
+                while(!sendIsCompleted){}
+                return true;
+            }
+            else {
+                System.out.println("Connection is closed.");
+                return false;
+            }
+        }
+        public synchronized int dataRead(byte [] read){
+            if(mSocket.isConnected()){
+                readIsCompleted = false;
+                needToRead = true;
+                while(!readIsCompleted){}
+                int len = size;
+                for (int i = 0;i < len;++i){
+                    read[i]=buffer[i];
+                }
+                return len;
+            }
+            else{
+                System.out.println("Connection is closed.");
+                return -1;
+            }
+        }
     }
 
     public synchronized boolean dataWrite(byte [] send){
-        if(mSocket.isConnected()){
-            sendIsCompleted = false;
-            buffer = new byte [512];
-            buffer = send;
-            needToSend = true;
-            while(!sendIsCompleted){}
+        if(mSocket.isConnected() && NetworkActivity.isServer){
+            serverThread.dataWrite(send);
             return true;
         }
-        else {
-            System.out.println("Connection is closed.");
-            return false;
+        if(mSocket.isConnected() && NetworkActivity.isClient){
+            clientThread.dataWrite(send);
+            return true;
         }
+        return false;
     }
 
     public synchronized int dataRead(byte [] read){
-        if(mSocket.isConnected()){
-            readIsCompleted = false;
-            needToRead = true;
-            while(!readIsCompleted){}
-            int len = size;
-            for (int i = 0;i < len;++i){
-                read[i]=buffer[i];
-            }
+        if(mSocket.isConnected() && NetworkActivity.isServer) {
+            int len = serverThread.dataRead(read);
             return len;
         }
-        else{
-            System.out.println("Connection is closed.");
-            return -1;
+        if(mSocket.isConnected() && NetworkActivity.isClient) {
+            int len = clientThread.dataRead(read);
+            return len;
         }
+        return -1;
     }
 
     public boolean isConneted(){return mSocket.isConnected();}
