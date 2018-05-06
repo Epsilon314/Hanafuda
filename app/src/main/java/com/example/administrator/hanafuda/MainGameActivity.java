@@ -2,6 +2,7 @@ package com.example.administrator.hanafuda;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,7 +30,7 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     private TextView opponentPoint;
     private TextView deckRemain;
     private Game newGame;
-    private GameGuiUtils guiUtils;
+    private static GameGuiUtils guiUtils;
     private NaiveComputerPlayer computerPlayer;
     private NetworkInterface networkInterface = new NetworkInterface(NetworkActivity.isServer,NetworkActivity.isClient);
 
@@ -44,6 +45,8 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
     private long exitTime = 0;
 
     public static boolean connected = false;
+
+    private Handler waitOpponent = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -400,4 +403,29 @@ public class MainGameActivity extends AppCompatActivity implements View.OnClickL
         }
         return super.onKeyDown(keyCode,event);
     }
+
+    class waitOpponentThread extends Thread {
+        @Override
+        public void run() {
+            byte[] buff = new byte[512];
+            while (networkInterface.dataRead(buff) <= 0) {}
+            receiveMsg = (GameMessage.stepMessage) guiUtils.unserialize(buff);
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    newGame.playCardRound(receiveMsg.getPlayedCardId());
+                    if (checkGameAutoEnd()) {
+                        endGame(newGame);
+                    }
+                    if (!newGame.isGameActive()) {
+                        showGameOverDiag();
+                    }
+                    updateAllView();
+                    newGame.changeActiveplayer();
+                }
+            };
+            waitOpponent.post(runnable);
+        }
+    }
+
 }
